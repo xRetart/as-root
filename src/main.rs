@@ -1,6 +1,7 @@
 mod arguments;
 mod interface;
-mod app;
+mod actions;
+mod error;
 
 
 fn main()
@@ -10,22 +11,37 @@ fn main()
 	match arguments::get_action()
 	{
 		// usual cases
-		Ok(Action::Command(cmd)) => run_command(cmd),
-		Ok(Action::Configuration(config)) => app::configure(config),
+		Ok(Action::Command(cmd)) => run(cmd),
+		Ok(Action::Configuration(config)) => configure(&config),
 
-		// error cases
-		Ok(Action::Error(msg)) |
+		// error case
 		Err(msg) => interface::issue_error(msg),
 	}
 }
-#[allow(unused_variables)]
-fn run_command(cmd: Vec<String>)
+
+fn run(cmd: Vec<String>)
 {
-	let result = app::run(cmd);
-	
-	#[cfg(debug_assertions)]
-	if result.is_err()
+	handle_result(&actions::elevate::run(cmd))
+}
+fn configure(config: &String)
+{
+	handle_result(&actions::configure::configure(config.as_str()))
+}
+
+
+fn handle_result<T>(result: &error::EnumResult<T>)
+{
+	if let Err(err) = result { handle_error(err); }
+}
+fn handle_error(err: &error::Error)
+{
+	if let error::Error::System(msg) = err
 	{
-		interface::issue_debug("Execution failed.")
+		interface::issue_error(msg);
+	}
+	else
+	{
+		use strum::AsStaticRef;
+		interface::issue_error(err.as_static())
 	}
 }
