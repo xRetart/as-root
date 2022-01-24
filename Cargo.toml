@@ -1,12 +1,8 @@
 [package]
 name = "as-root"
 version = "0.1.0"
-authors = ["xRetart <richard.network96@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-libc = "0.2.94"
-strum = "0.20.0"
-strum_macros = "0.20.1"
