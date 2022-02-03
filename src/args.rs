@@ -10,6 +10,6 @@ pub fn parse() -> Result<Command, Error> {
 
     args
         .next()
-        .ok_or(Error::ParseArgs)
+        .ok_or(Error::NoArgs)
         .map(|name| { let mut cmd = Command::new(name); cmd.args(args); cmd })
 }

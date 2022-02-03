@@ -1,6 +1,6 @@
 use {std::process::Command, crate::error::Error};
 
-pub fn run_privileged(mut cmd: Command) -> Result<i32, Error> {
+pub fn privileged(mut cmd: Command) -> Result<i32, Error> {
     use std::os::unix::prelude::CommandExt;
 
     const ROOT: u32 = 0;
