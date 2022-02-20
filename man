@@ -1,0 +1,29 @@
+.TH AS-ROOT 1 2022-02-20 GNU
+
+.SH NAME
+as-root \- execute commands as root user
+
+.SH SYNOPSIS
+.B as-root
+.I COMMAND
+[\fIARGUMENTS\fR]...
+
+.SH DESCRIPTION
+.B as-root
+executes a comamnd with root privileges.
+
+.SH OPTIONS
+.TP
+.I COMMAND
+name of the command to run
+.TP
+.I ARGUMENTS
+arguments for command in preserved order
+
+.SH FILES
+.TP
+.I /etc/conf.d/as-root
+A line feed separated list of users permitted for use.
+
+.SH SEE ALSO
+\fBsudo\fR(1), \fBdoas\fR(1)
