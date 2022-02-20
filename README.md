@@ -16,10 +16,14 @@ while keeping the source readable and easily maintained.
 
 ### command
 With root permissions run:  
-`make install`
+```shell
+make install
+```
 
 
 ## usage
 Put the user authorized for use of `as-root` into `/etc/conf.d/as-root` separated by line feeds.  
 Then you will be able to run `<command>` with root permissions like so:  
-`as-root <command>`
+```shell
+as-root <command>
+```
