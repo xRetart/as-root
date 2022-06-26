@@ -17,8 +17,7 @@ $(CARGO_OUTPUT): src/*.rs Cargo.toml
 
 install: $(CARGO_OUTPUT)
 	install --owner=root --group=root --mode=6755 --strip $(CARGO_OUTPUT) $(BIN_DEST) && \
-	install --owner=root --group=root --mode=644 $(MAN) $(MAN_DEST) && \
-	bzip2 $(MAN_DEST)
+	install --owner=root --group=root --mode=644 $(MAN) $(MAN_DEST)
 
 uninstall:
-	rm --recursive --force $(BIN_DEST)
+	rm --force $(BIN_DEST)/$(BIN)
