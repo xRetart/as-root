@@ -1,15 +1,19 @@
-use {std::process::Command, crate::error::Error};
+use {std::process::Command, anyhow::Result};
 
-pub fn privileged(mut cmd: Command) -> Result<i32, Error> {
+pub fn privileged(mut cmd: Command) -> Result<Option<i32>> {
+    elevate(&mut cmd);
+
+    Ok(
+        cmd
+            .spawn()?
+            .wait()?
+            .code()
+    )
+}
+fn elevate(cmd: &mut Command) {
     use std::os::unix::prelude::CommandExt;
 
     const ROOT: u32 = 0;
 
-    cmd
-        .uid(ROOT)
-        .gid(ROOT)
-        .spawn()
-        .and_then(|mut child| child.wait())
-        .map_err(Error::Io)
-        .and_then(|status| status.code().ok_or(Error::NoExitCode))
+    cmd.uid(ROOT).gid(ROOT);
 }

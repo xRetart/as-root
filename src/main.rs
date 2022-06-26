@@ -1,30 +1,31 @@
-mod error;
 mod run;
 mod args;
 mod config;
 
-use error::Error;
+use anyhow::{anyhow, Result};
 
 
 fn main() {
     use std::process::exit;
 
-    exit(code_main())
+    if let Some(code) = code_main() {
+        exit(code);
+    }
 }
-fn code_main() -> i32 {
+fn code_main() -> Option<i32> {
     result_main()
-        .unwrap_or_else(|err| { err.report(); 1 })
+        .unwrap_or_else(|err| { eprintln!("{}", err); Some(1) })
 }
-fn result_main() -> Result<i32, Error> {
+fn result_main() -> Result<Option<i32>> {
     use {std::path::Path, users::get_current_uid};
-    
+
     let config = config::Data::from_file(Path::new("/etc/conf.d/as-root"))?;
-    
+
     if config.permitted_users.contains(&get_current_uid()) {
         args::parse()
             .and_then(run::privileged)
     }
     else {
-        Err(Error::UserDenied)
+        Err(anyhow!("Permission denied."))
     }
 }
