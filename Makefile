@@ -1,23 +1,17 @@
 PREFIX = /usr/local
 
-# binary
-BIN = as-root
-BIN_DEST = $(PREFIX)/bin
+NAME = as-root
 
-# man page
-MAN = man
-MAN_DEST = $(PREFIX)/share/man/man1/as-root.1
+GLOBAL = $(PREFIX)/bin/$(NAME)
+LOCAL = target/release/$(NAME)
 
-# cargo
-CARGO_MODE = release
-CARGO_OUTPUT=target/$(CARGO_MODE)/$(BIN)
 
-$(CARGO_OUTPUT): src/*.rs Cargo.toml
-	cargo build --$(CARGO_MODE)
+$(LOCAL): src/*.rs Cargo.toml
+	cargo build --release
 
-install: $(CARGO_OUTPUT)
-	install --owner=root --group=root --mode=6755 --strip $(CARGO_OUTPUT) $(BIN_DEST) && \
-	install --owner=root --group=root --mode=644 $(MAN) $(MAN_DEST)
+install: $(LOCAL)
+	install -o root -g root -m 6755 -s $(LOCAL) $(GLOBAL) && \
+	install -o root -g root -m 644 man $(PREFIX)/share/man/man1/as-root.1
 
 uninstall:
-	rm --force $(BIN_DEST)/$(BIN)
+	$(RM) $(GLOBAL)
