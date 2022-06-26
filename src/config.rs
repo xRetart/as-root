@@ -1,7 +1,7 @@
 use {
+    anyhow::{anyhow, Error, Result},
     std::{path::Path, str::FromStr},
     users::uid_t,
-    anyhow::{anyhow, Result, Error},
 };
 
 pub struct Data {
@@ -24,11 +24,10 @@ impl FromStr for Data {
 
             get_user_by_name(name)
                 .map(|name| name.uid())
-                .ok_or(anyhow!("Configuration contains invalid user."))
+                .ok_or_else(|| anyhow!("Configuration contains invalid user."))
         }
 
-        s
-            .lines()
+        s.lines()
             .map(|line| username_to_id(line.trim()))
             .collect::<Result<_, _>>()
             .map(|permitted_users| Self { permitted_users })

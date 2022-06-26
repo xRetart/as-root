@@ -1,14 +1,9 @@
-use {std::process::Command, anyhow::Result};
+use {anyhow::Result, std::process::Command};
 
 pub fn privileged(mut cmd: Command) -> Result<Option<i32>> {
     elevate(&mut cmd);
 
-    Ok(
-        cmd
-            .spawn()?
-            .wait()?
-            .code()
-    )
+    Ok(cmd.spawn()?.wait()?.code())
 }
 fn elevate(cmd: &mut Command) {
     use std::os::unix::prelude::CommandExt;

@@ -1,4 +1,7 @@
-use {std::process::Command, anyhow::{anyhow, Result}};
+use {
+    anyhow::{anyhow, Result},
+    std::process::Command,
+};
 
 pub fn parse() -> Result<Command> {
     use std::env::args;
@@ -8,7 +11,9 @@ pub fn parse() -> Result<Command> {
     // skip argv[0] because it's the path to this executable most of the time
     args.next();
 
-    let name = args.next().ok_or_else(|| anyhow!("Not enough arguments."))?;
+    let name = args
+        .next()
+        .ok_or_else(|| anyhow!("Not enough arguments."))?;
     let mut cmd = Command::new(name);
     cmd.args(args);
 
